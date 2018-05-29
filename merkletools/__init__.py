@@ -18,25 +18,25 @@ def to_hex(x):
         return binascii.hexlify(x)
 
 
+def _get_hash_func(hash_type):
+    supported_hash_types = {
+        'sha256', 'md5', 'sha224', 'sha384', 'sha512',
+        'sha3_256', 'sha3_224', 'sha3_384', 'sha3_512'
+    }
+    hash_type = hash_type.lower()
+    if hash_type not in supported_hash_types:
+        raise NotImplementedError(
+            "`hash_type` {} is not supported. Supported types are "
+            "{}".format(hash_type, supported_hash_types)
+        )
+    return getattr(hashlib, hash_type)
+
+
 class MerkleTools(object):
     def __init__(self, hash_type="sha256"):
-        hash_type = hash_type.lower()
-        if hash_type in self.supported_hash_types:
-            self.hash_func = getattr(hashlib, hash_type)
-        else:
-            raise NotImplementedError(
-                "`hash_type` {} is not supported. Supported types are "
-                "{}".format(hash_type, self.supported_hash_types)
-            )
+        self.hash_func = _get_hash_func(hash_type)
         self.leaves = []
         self.levels = None
-
-    @property
-    def supported_hash_types(self):
-        return {
-            'sha256', 'md5', 'sha224', 'sha384', 'sha512',
-            'sha3_256', 'sha3_224', 'sha3_384', 'sha3_512'
-        }
 
     def add_leaf(self, values, do_hash=False):
         if not isinstance(values, (list, tuple)):
@@ -55,37 +55,32 @@ class MerkleTools(object):
     def num_leaves(self):
         return len(self.leaves)
 
-    def _calculate_next_level(self):
-        solo_leave = None
-        current_level = self.levels[0]
-        num_leaves = len(current_level)
-        if num_leaves % 2 == 1:
-            solo_leave = current_level[-1]
-            num_leaves -= 1
-
-        new_level = []
-        for i in range(0, num_leaves, 2):
-            value = current_level[i] + current_level[i+1]
-            new_level.append(self.hash_func(value).digest())
-        if solo_leave is not None:
-            new_level.append(solo_leave)
-        self.levels = [new_level] + self.levels
-
     def make_tree(self):
         if self.num_leaves == 0:
-            raise ValueError("No leaves to make tree!")
+            raise ValueError("No leaf to make tree!")
         self.levels = [self.leaves]
         while len(self.levels[0]) > 1:
             self._calculate_next_level()
-        self.is_tree_ready = True
 
-    def get_merkle_root(self):
-        if self.levels is not None:
+    def _calculate_next_level(self):
+        current_level = self.levels[0]
+        num_leaves_current_level = len(current_level)
+        new_level = [
+            self.hash_func(current_level[i] + current_level[i+1]).digest()
+            for i in range(0, num_leaves_current_level - 1, 2)
+        ]
+        if num_leaves_current_level % 2 == 1:
+            new_level.append(current_level[-1])
+        self.levels = [new_level] + self.levels
+
+    @property
+    def merkle_root(self):
+        if self.levels:
             return to_hex(self.levels[0][0])
 
     def get_proof(self, index):
-        if self.levels is None or index > len(self.leaves)-1 or index < 0:
-            return None
+        if not self.levels or not 0 <= index < len(self.leaves):
+            return
         proof = []
         for x in range(len(self.levels) - 1, 0, -1):
             level_len = len(self.levels[x])
