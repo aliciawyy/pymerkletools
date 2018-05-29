@@ -1,5 +1,7 @@
 # pymerkletools
-[![PyPI version](https://badge.fury.io/py/merkletools.svg)](https://badge.fury.io/py/merkletools) [![Build Status](https://travis-ci.org/Tierion/pymerkletools.svg?branch=master)](https://travis-ci.org/Tierion/pymerkletools)
+[![PyPI version](https://badge.fury.io/py/merkletools.svg)](https://badge.fury.io/py/merkletools)
+[![Build Status](https://travis-ci.org/aliciawyy/pymerkletools.svg?branch=master)](https://travis-ci.org/aliciawyy/pymerkletools)
+[![Build Status](https://travis-ci.org/Tierion/pymerkletools.svg?branch=master)](https://travis-ci.org/Tierion/pymerkletools)
 
 This is a Python port of [merkle-tools](https://github.com/tierion/merkle-tools).
 
@@ -48,7 +50,7 @@ mt.add_leaf(list_data, True)
 Returns the number of leaves that are currently added to the tree. 
 
 ```python
-leaf_count =  mt.get_leaf_count();
+leaf_count =  mt.num_leaves;
 ```
 
 ### get_leaf(index)

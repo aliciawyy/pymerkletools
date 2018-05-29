@@ -11,7 +11,7 @@ if sys.version_info.major == 2:
     import binascii
 
 
-def _to_hex(x):
+def to_hex(x):
     if sys.version_info.major == 3:
         return x.hex()
     else:
@@ -31,8 +31,7 @@ class MerkleTools(object):
 
         self.leaves = list()
         self.levels = None
-        self.is_ready = False
-        self.reset_tree()
+        self.is_tree_ready = False
 
     @property
     def supported_hash_types(self):
@@ -41,13 +40,8 @@ class MerkleTools(object):
             'sha3_256', 'sha3_224', 'sha3_384', 'sha3_512'
         }
 
-    def reset_tree(self):
-        self.leaves = list()
-        self.levels = None
-        self.is_ready = False
-
     def add_leaf(self, values, do_hash=False):
-        self.is_ready = False
+        self.is_tree_ready = False
         if not isinstance(values, (list, tuple)):
             values = [values]
         for v in values:
@@ -58,14 +52,11 @@ class MerkleTools(object):
             self.leaves.append(v)
 
     def get_leaf(self, index):
-        return _to_hex(self.leaves[index])
+        return to_hex(self.leaves[index])
 
     @property
     def num_leaves(self):
         return len(self.leaves)
-
-    def get_tree_ready_state(self):
-        return self.is_ready
 
     def _calculate_next_level(self):
         solo_leave = None
@@ -82,26 +73,21 @@ class MerkleTools(object):
         self.levels = [new_level, ] + self.levels  # prepend new level
 
     def make_tree(self):
-        self.is_ready = False
         if self.num_leaves > 0:
             self.levels = [self.leaves, ]
             while len(self.levels[0]) > 1:
                 self._calculate_next_level()
-        self.is_ready = True
+            self.is_tree_ready = True
 
     def get_merkle_root(self):
-        if self.is_ready:
+        if self.is_tree_ready:
             if self.levels is not None:
-                return _to_hex(self.levels[0][0])
-            else:
-                return None
-        else:
-            return None
+                return to_hex(self.levels[0][0])
 
     def get_proof(self, index):
         if self.levels is None:
             return None
-        elif not self.is_ready or index > len(self.leaves)-1 or index < 0:
+        elif not self.is_tree_ready or index > len(self.leaves)-1 or index < 0:
             return None
         else:
             proof = []
@@ -113,7 +99,7 @@ class MerkleTools(object):
                 is_right_node = index % 2
                 sibling_index = index - 1 if is_right_node else index + 1
                 sibling_pos = "left" if is_right_node else "right"
-                sibling_value = _to_hex(self.levels[x][sibling_index])
+                sibling_value = to_hex(self.levels[x][sibling_index])
                 proof.append({sibling_pos: sibling_value})
                 index = int(index / 2.)
             return proof

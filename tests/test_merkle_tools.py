@@ -1,5 +1,17 @@
 import hashlib
-from merkletools import MerkleTools
+from pytest import raises
+from merkletools import MerkleTools, to_hex
+
+
+def test_init_raises():
+    raises(NotImplementedError, MerkleTools, "sha_dummy")
+
+
+def test_to_hex():
+    mt = MerkleTools()
+    v_hex = mt.hash_func(str.encode("000")).hexdigest()
+    v_byte = bytearray.fromhex(v_hex)
+    assert v_hex == to_hex(v_byte)
 
 
 def test_add_leaf():
@@ -7,16 +19,16 @@ def test_add_leaf():
     mt.add_leaf("tierion", do_hash=True)
     mt.add_leaf(["bitcoin", "blockchain"], do_hash=True)
     assert mt.num_leaves == 3
-    assert not mt.is_ready
+    assert not mt.is_tree_ready
 
 
-def test_build_tree():
+def test_make_tree():
     mt = MerkleTools()
     mt.add_leaf("tierion", do_hash=True)
     mt.add_leaf(["bitcoin", "blockchain"], do_hash=True)
     mt.make_tree()
-    assert mt.is_ready
-    mt.get_merkle_root() == '765f15d171871b00034ee55e48ffdf76afbc44ed0bcff5c82f31351d333c2ed1'
+    assert mt.is_tree_ready
+    assert mt.get_merkle_root() == '765f15d171871b00034ee55e48ffdf76afbc44ed0bcff5c82f31351d333c2ed1'
 
 
 def test_get_proof():
@@ -90,7 +102,7 @@ def test_unhashed_leaves():
     mt.make_tree()
     assert mt.get_merkle_root() == 'd71f8983ad4ee170f8129f1ebcdd7440be7798d8e1c80420bf11f1eced610dba'
 
-    mt.reset_tree()
+    mt = MerkleTools()
     mt.add_leaf(['a', 'b', 'c', 'd', 'e'], True)
     mt.make_tree()
     assert mt.get_merkle_root() == 'd71f8983ad4ee170f8129f1ebcdd7440be7798d8e1c80420bf11f1eced610dba'
