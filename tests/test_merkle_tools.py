@@ -43,14 +43,16 @@ def test_get_proof():
 
 
 def test_merkle_root_basics():
-    bLeft = 'a292780cc748697cb499fdcc8cb89d835609f11e502281dfe3f6690b1cc23dcb'
-    bRight = 'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
+    v_left, v_right = (
+        'a292780cc748697cb499fdcc8cb89d835609f11e502281dfe3f6690b1cc23dcb',
+        'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
+    )
     expected_root = hashlib.sha256(
-        bytearray.fromhex(bLeft) + bytearray.fromhex(bRight)
+        bytearray.fromhex(v_left) + bytearray.fromhex(v_right)
     ).hexdigest()
 
     mt = MerkleTools()
-    mt.add_leaf([bLeft, bRight])
+    mt.add_leaf([v_left, v_right])
     assert expected_root == mt.merkle_root
 
 
@@ -91,27 +93,24 @@ def test_merkle_root():
 def test_md5_tree():
     bLeftmd5 = '0cc175b9c0f1b6a831c399e269772661'
     bRightmd5 = '92eb5ffee6ae2fec3ad71c777531578f'
-    mRootmd5 = hashlib.md5(
+    expected_root = hashlib.md5(
         bytearray.fromhex(bLeftmd5) + bytearray.fromhex(bRightmd5)
     ).hexdigest()
 
     mt = MerkleTools('md5')
     mt.add_leaf([bLeftmd5, bRightmd5])
-    assert mt.merkle_root == mRootmd5
+    assert mt.merkle_root == expected_root
 
 
 def test_proof_nodes():
-    bLeft = 'a292780cc748697cb499fdcc8cb89d835609f11e502281dfe3f6690b1cc23dcb'
-    bRight = 'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
-    mRoot = hashlib.sha256(bytearray.fromhex(bLeft) + bytearray.fromhex(bRight)).hexdigest()
-
+    v_left, v_right = (
+        'a292780cc748697cb499fdcc8cb89d835609f11e502281dfe3f6690b1cc23dcb',
+        'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
+    )
     mt = MerkleTools()
-    mt.add_leaf(bLeft)
-    mt.add_leaf(bRight)
-    proof = mt.get_proof(0)
-    assert proof[0]['right'] == 'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
-    proof = mt.get_proof(1)
-    assert proof[0]['left'] == 'a292780cc748697cb499fdcc8cb89d835609f11e502281dfe3f6690b1cc23dcb'
+    mt.add_leaf([v_left, v_right])
+    assert [{"right": v_right}] == mt.get_proof(0)
+    assert [{"left": v_left}] == mt.get_proof(1)
 
 
 def test_bad_proof():

@@ -83,15 +83,15 @@ class MerkleTools(object):
     def get_proof(self, index):
         self._make_tree()
         proof = []
-        for x in range(len(self.levels) - 1, 0, -1):
-            level_len = len(self.levels[x])
-            if (index == level_len - 1) and (level_len % 2 == 1):  # skip if this is an odd end node
+        for i in range(len(self.levels) - 1, 0, -1):
+            level_len = len(self.levels[i])
+            if index == level_len - 1 and level_len % 2 == 1:
                 index = int(index / 2.)
                 continue
-            is_right_node = index % 2
+            is_right_node = index % 2 == 1
             sibling_index = index - 1 if is_right_node else index + 1
             sibling_pos = "left" if is_right_node else "right"
-            sibling_value = to_hex(self.levels[x][sibling_index])
+            sibling_value = to_hex(self.levels[i][sibling_index])
             proof.append({sibling_pos: sibling_value})
             index = int(index / 2.)
         return proof
