@@ -19,7 +19,6 @@ def test_add_leaf():
     mt.add_leaf("tierion", do_hash=True)
     mt.add_leaf(["bitcoin", "blockchain"], do_hash=True)
     assert mt.num_leaves == 3
-    assert not mt.is_tree_ready
 
 
 def test_make_tree():
@@ -27,7 +26,6 @@ def test_make_tree():
     mt.add_leaf("tierion", do_hash=True)
     mt.add_leaf(["bitcoin", "blockchain"], do_hash=True)
     mt.make_tree()
-    assert mt.is_tree_ready
     assert mt.get_merkle_root() == '765f15d171871b00034ee55e48ffdf76afbc44ed0bcff5c82f31351d333c2ed1'
 
 
@@ -52,23 +50,12 @@ def test_basics():
 
     # tree with no leaves
     mt = MerkleTools()
-    mt.make_tree()
     assert mt.get_merkle_root() is None
 
     # tree with hex add_leaf
     mt.add_leaf([bLeft, bRight])
     mt.make_tree()
     assert mt.get_merkle_root() == mRoot
-
-
-def test_bad_hex():
-    # try to add bad hex
-    mt = MerkleTools()
-    try:
-        mt.add_leaf('nothexandnothashed')
-        assert False   # should not get here!
-    except:
-        pass
 
 
 def test_one_leaf():
@@ -136,7 +123,6 @@ def test_proof_nodes():
 
 def test_proof_no_leaves():
     mt = MerkleTools()
-    mt.make_tree()
     proof = mt.get_proof(0)
     assert proof is None
 

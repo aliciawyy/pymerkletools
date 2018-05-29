@@ -1,7 +1,7 @@
 # pymerkletools
 [![PyPI version](https://badge.fury.io/py/merkletools.svg)](https://badge.fury.io/py/merkletools)
 [![Build Status](https://travis-ci.org/aliciawyy/pymerkletools.svg?branch=master)](https://travis-ci.org/aliciawyy/pymerkletools)
-[![Build Status](https://travis-ci.org/Tierion/pymerkletools.svg?branch=master)](https://travis-ci.org/Tierion/pymerkletools)
+[![codecov](https://codecov.io/gh/aliciawyy/pymerkletools/branch/master/graph/badge.svg)](https://codecov.io/gh/aliciawyy/pymerkletools)
 
 This is a Python port of [merkle-tools](https://github.com/tierion/merkle-tools).
 
