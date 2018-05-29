@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/aliciawyy/pymerkletools.svg?branch=master)](https://travis-ci.org/aliciawyy/pymerkletools)
 [![codecov](https://codecov.io/gh/aliciawyy/pymerkletools/branch/master/graph/badge.svg)](https://codecov.io/gh/aliciawyy/pymerkletools)
 
+This code is adapted from the [pymerkletools](https://github.com/aliciawyy/pymerkletools) of Tierion.
+
 This is a Python port of [merkle-tools](https://github.com/tierion/merkle-tools).
 
 Tools for creating Merkle trees, generating merkle proofs, and verification of merkle proofs.
@@ -45,7 +47,7 @@ mt.add_leaf(hex_data)
 mt.add_leaf(list_data, True)
 ```
 
-### get_leaf_count()
+### num_leaves
 
 Returns the number of leaves that are currently added to the tree. 
 
@@ -61,36 +63,12 @@ Returns the value of the leaf at the given index as a hex string.
 leaf_value =  mt.get_leaf(1)
 ```
 
-### reset_tree()
-
-Removes all the leaves from the tree, prepararing to to begin creating a new tree.
-
-```python
-mt.reset_tree()
-```
-
-### make_tree()
-
-Generates the merkle tree using the leaves that have been added.
-
-```python
-mt.make_tree();
-```
-
-### is_ready 
-
-`.is_ready` is a boolean property indicating if the tree is built and ready to supply its root and proofs. The `is_ready` state is `True` only after calling 'make_tree()'.  Adding leaves or resetting the tree will change the ready state to False.
-
-```python
-is_ready = mt.is_ready 
-```
-
-### get_merkle_root()
+### merkle_root
 
 Returns the merkle root of the tree as a hex string. If the tree is not ready, `None` is returned.
 
 ```python
-root_value = mt.get_merkle_root();
+root_value = mt.merkle_root
 ```
 
 ### get_proof(index)
