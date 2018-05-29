@@ -55,7 +55,9 @@ class MerkleTools(object):
     def num_leaves(self):
         return len(self.leaves)
 
-    def make_tree(self):
+    def _make_tree(self):
+        if self.levels:
+            return
         if self.num_leaves == 0:
             raise ValueError("No leaf to make tree!")
         self.levels = [self.leaves]
@@ -75,12 +77,11 @@ class MerkleTools(object):
 
     @property
     def merkle_root(self):
-        if self.levels:
-            return to_hex(self.levels[0][0])
+        self._make_tree()
+        return to_hex(self.levels[0][0])
 
     def get_proof(self, index):
-        if not self.levels or not 0 <= index < len(self.leaves):
-            return
+        self._make_tree()
         proof = []
         for x in range(len(self.levels) - 1, 0, -1):
             level_len = len(self.levels[x])
