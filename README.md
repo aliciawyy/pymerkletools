@@ -35,7 +35,7 @@ pip install pysha3==1.0b1
 
 ## Methods
 
-### add_leaf(value, do_hash)
+### add_leaves(value, do_hash)
 
 Adds a value as a leaf or a list of leafs to the tree. The value must be a hex string, otherwise set the optional `do_hash` to true to have your value hashed prior to being added to the tree. 
 
@@ -43,8 +43,8 @@ Adds a value as a leaf or a list of leafs to the tree. The value must be a hex s
 hex_data = '05ae04314577b2783b4be98211d1b72476c59e9c413cfb2afa2f0c68e0d93911'
 list_data = ['Some text data', 'perhaps']
 
-mt.add_leaf(hex_data)
-mt.add_leaf(list_data, True)
+mt.add_leaves(hex_data)
+mt.add_leaves(list_data, True)
 ```
 
 ### num_leaves
@@ -112,8 +112,8 @@ The proof process uses all the proof objects in the array to attempt to prove a 
 ```python
 mt = MerkleTools()
 
-mt.add_leaf("tierion", True)
-mt.add_leaf(["bitcoin", "blockchain"], True)
+mt.add_leaves("tierion", True)
+mt.add_leaves(["bitcoin", "blockchain"], True)
 
 mt.make_tree()
 

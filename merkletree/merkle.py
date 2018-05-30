@@ -45,10 +45,14 @@ class MerkleTree(object):
         return self.levels[-1]
 
     @property
-    def is_tree_ready(self):
-        return len(self.levels[-1]) == 1 or len(self.levels) > 1
+    def num_leaves(self):
+        return len(self.leaves)
 
-    def add_leaf(self, values, do_hash=False):
+    @property
+    def is_tree_ready(self):
+        return self.num_leaves == 1 or len(self.levels) > 1
+
+    def add_leaves(self, values, do_hash=False):
         if not isinstance(values, (list, tuple)):
             values = [values]
         for v in values:
@@ -62,10 +66,6 @@ class MerkleTree(object):
 
     def get_leaf(self, index):
         return byte_to_hex(self.leaves[index])
-
-    @property
-    def num_leaves(self):
-        return len(self.leaves)
 
     def _make_tree(self):
         if self.is_tree_ready:
