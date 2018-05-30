@@ -103,24 +103,17 @@ class MerkleTree(object):
             sibling_index = index - 1 if is_right_node else index + 1
             sibling_pos = "left" if is_right_node else "right"
             sibling_value = byte_to_hex(self.levels[i][sibling_index])
-            proof.append({sibling_pos: sibling_value})
+            proof.append((sibling_pos, sibling_value))
             index = int(index / 2.)
         return proof
 
-    def validate_proof(self, proof, target_hash, merkle_root):
-        merkle_root = hex_to_byte(merkle_root)
-        target_hash = hex_to_byte(target_hash)
-        if len(proof) == 0:
-            return target_hash == merkle_root
-        else:
-            proof_hash = target_hash
-            for p in proof:
-                try:
-                    # the sibling is a left node
-                    sibling = hex_to_byte(p['left'])
-                    proof_hash = self.hash_func(sibling + proof_hash).digest()
-                except:
-                    # the sibling is a right node
-                    sibling = hex_to_byte(p['right'])
-                    proof_hash = self.hash_func(proof_hash + sibling).digest()
-            return proof_hash == merkle_root
+    def is_proof_valid(self, proof, target_hash):
+        proof_hash_byte = hex_to_byte(target_hash)
+        for sibling_pos, sibling_hash in proof:
+            sibling_hash_byte = hex_to_byte(sibling_hash)
+            if sibling_pos == "left":
+                info = sibling_hash_byte + proof_hash_byte
+            else:
+                info = proof_hash_byte + sibling_hash_byte
+            proof_hash_byte = self.hash_func(info).digest()
+        return byte_to_hex(proof_hash_byte) == self.merkle_root

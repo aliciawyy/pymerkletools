@@ -1,3 +1,4 @@
 pysha3>=1.0b1
+parameterized
 pytest
 pytest-cov
