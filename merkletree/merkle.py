@@ -11,11 +11,14 @@ if sys.version_info.major == 2:
     import binascii
 
 
-def to_hex(x):
+def byte_to_hex(x):
     if sys.version_info.major == 3:
         return x.hex()
     else:
         return binascii.hexlify(x)
+
+
+hex_to_byte = bytearray.fromhex
 
 
 def _get_hash_func(hash_type):
@@ -32,7 +35,7 @@ def _get_hash_func(hash_type):
     return getattr(hashlib, hash_type)
 
 
-class MerkleTools(object):
+class MerkleTree(object):
     def __init__(self, hash_type="sha256"):
         self.hash_func = _get_hash_func(hash_type)
         self.leaves = []
@@ -45,11 +48,11 @@ class MerkleTools(object):
             if do_hash:
                 v = v.encode('utf-8')
                 v = self.hash_func(v).hexdigest()
-            v = bytearray.fromhex(v)
+            v = hex_to_byte(v)
             self.leaves.append(v)
 
     def get_leaf(self, index):
-        return to_hex(self.leaves[index])
+        return byte_to_hex(self.leaves[index])
 
     @property
     def num_leaves(self):
@@ -78,7 +81,7 @@ class MerkleTools(object):
     @property
     def merkle_root(self):
         self._make_tree()
-        return to_hex(self.levels[0][0])
+        return byte_to_hex(self.levels[0][0])
 
     def get_proof(self, index):
         self._make_tree()
@@ -91,14 +94,14 @@ class MerkleTools(object):
             is_right_node = index % 2 == 1
             sibling_index = index - 1 if is_right_node else index + 1
             sibling_pos = "left" if is_right_node else "right"
-            sibling_value = to_hex(self.levels[i][sibling_index])
+            sibling_value = byte_to_hex(self.levels[i][sibling_index])
             proof.append({sibling_pos: sibling_value})
             index = int(index / 2.)
         return proof
 
     def validate_proof(self, proof, target_hash, merkle_root):
-        merkle_root = bytearray.fromhex(merkle_root)
-        target_hash = bytearray.fromhex(target_hash)
+        merkle_root = hex_to_byte(merkle_root)
+        target_hash = hex_to_byte(target_hash)
         if len(proof) == 0:
             return target_hash == merkle_root
         else:
@@ -106,10 +109,10 @@ class MerkleTools(object):
             for p in proof:
                 try:
                     # the sibling is a left node
-                    sibling = bytearray.fromhex(p['left'])
+                    sibling = hex_to_byte(p['left'])
                     proof_hash = self.hash_func(sibling + proof_hash).digest()
                 except:
                     # the sibling is a right node
-                    sibling = bytearray.fromhex(p['right'])
+                    sibling = hex_to_byte(p['right'])
                     proof_hash = self.hash_func(proof_hash + sibling).digest()
             return proof_hash == merkle_root
