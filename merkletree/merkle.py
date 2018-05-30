@@ -50,7 +50,7 @@ class MerkleTree(object):
 
     @property
     def is_tree_ready(self):
-        return self.num_leaves == 1 or len(self.levels) > 1
+        return len(self.levels) > 1 or self.num_leaves == 1
 
     def add_leaves(self, values, do_hash=False):
         if not isinstance(values, (list, tuple)):
@@ -95,11 +95,11 @@ class MerkleTree(object):
         self._make_tree()
         proof = []
         for i in range(len(self.levels) - 1, 0, -1):
-            level_len = len(self.levels[i])
-            if index == level_len - 1 and level_len % 2 == 1:
+            is_right_node = index % 2 == 1
+            num_leaves_current_level = len(self.levels[i])
+            if index == num_leaves_current_level - 1 and not is_right_node:
                 index = int(index / 2.)
                 continue
-            is_right_node = index % 2 == 1
             sibling_index = index - 1 if is_right_node else index + 1
             sibling_pos = "left" if is_right_node else "right"
             sibling_value = byte_to_hex(self.levels[i][sibling_index])
