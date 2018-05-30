@@ -7,7 +7,7 @@ install_requires = [
 
 setup(
     name='pymerkletree',
-    version='0.0.1',
+    version='1.0.0',
     description='Simple Merkle Tree',
     classifiers=[
         "Intended Audience :: Developers",
