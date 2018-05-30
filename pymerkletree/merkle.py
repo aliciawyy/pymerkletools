@@ -37,8 +37,8 @@ def _get_hash_func(hash_type):
 
 class MerkleTree(object):
 
-    _is_right_node_sibling_map = {
-        True: ("left", -1), False: ("right", 1)
+    _is_left_node_sibling_map = {
+        True: ("right", 1), False: ("left", -1)
     }
 
     def __init__(self, hash_type="sha256"):
@@ -100,12 +100,11 @@ class MerkleTree(object):
         self._make_tree()
         proof = []
         for current_level in self.levels[::-1]:
-            is_right_node = index % 2 == 1
-            is_solo_node = (index == len(current_level) - 1 and
-                            not is_right_node)
+            is_left_node = index % 2 == 0
+            is_solo_node = (index == len(current_level) - 1 and is_left_node)
             if not is_solo_node:
                 sibling_pos, offset = \
-                    self._is_right_node_sibling_map[is_right_node]
+                    self._is_left_node_sibling_map[is_left_node]
                 sibling_value = byte_to_hex(
                     current_level[index + offset]
                 )
