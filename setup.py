@@ -14,7 +14,7 @@ long_description = (
 
 setup(
     name="pymerkletree",
-    version='1.0.6',
+    version='1.0.7',
     description='Simple Merkle Tree',
     long_description=long_description,
     classifiers=[
