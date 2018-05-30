@@ -22,5 +22,6 @@ deploy:
   password: $PYPI_PASSWORD
   distributions: sdist bdist_wheel
   on:
+    python: "3.5"
     tags: true
     repo: aliciawyy/pymerkletools

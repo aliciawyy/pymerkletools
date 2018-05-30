@@ -5,12 +5,16 @@ install_requires = [
     "pysha3>=1.0b1"
 ]
 
-with open("README.md", "r") as fp:
-    long_description = fp.read()
+long_description = (
+    "This project is adapted from the pymerkletools of Tierion."
+    "It includes a `MerkleTree` class for creating Merkle trees, "
+    "generating merkle proofs, and verification of merkle proofs."
+)
+
 
 setup(
     name="pymerkletree",
-    version='1.0.5',
+    version='1.0.6',
     description='Simple Merkle Tree',
     long_description=long_description,
     classifiers=[
