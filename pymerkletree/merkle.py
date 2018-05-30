@@ -36,6 +36,11 @@ def _get_hash_func(hash_type):
 
 
 class MerkleTree(object):
+
+    _is_right_node_sibling_map = {
+        True: ("left", -1), False: ("right", 1)
+    }
+
     def __init__(self, hash_type="sha256"):
         self.hash_func = _get_hash_func(hash_type)
         self.levels = [[]]
@@ -52,7 +57,7 @@ class MerkleTree(object):
     def is_tree_ready(self):
         return len(self.levels) > 1 or self.num_leaves == 1
 
-    def add_leaves(self, values, do_hash=False):
+    def add_leaves(self, values, do_hash=True):
         if not isinstance(values, (list, tuple)):
             values = [values]
         for v in values:
@@ -94,15 +99,16 @@ class MerkleTree(object):
     def get_proof(self, index):
         self._make_tree()
         proof = []
-        for i in range(len(self.levels) - 1, 0, -1):
+        for current_level in self.levels[::-1]:
             is_right_node = index % 2 == 1
-            current_level = self.levels[i]
             is_solo_node = (index == len(current_level) - 1 and
                             not is_right_node)
             if not is_solo_node:
-                sibling_index = index - 1 if is_right_node else index + 1
-                sibling_pos = "left" if is_right_node else "right"
-                sibling_value = byte_to_hex(current_level[sibling_index])
+                sibling_pos, offset = \
+                    self._is_right_node_sibling_map[is_right_node]
+                sibling_value = byte_to_hex(
+                    current_level[index + offset]
+                )
                 proof.append((sibling_pos, sibling_value))
             index = int(index / 2.)
         return proof

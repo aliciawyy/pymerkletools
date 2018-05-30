@@ -61,16 +61,16 @@ def test_merkle_root_basics():
     ).hexdigest()
 
     mt = MerkleTree()
-    mt.add_leaves([v_left, v_right])
+    mt.add_leaves([v_left, v_right], False)
     assert expected_root == mt.merkle_root
-    mt.add_leaves(v_right)
+    mt.add_leaves(v_right, False)
     assert expected_root != mt.merkle_root
 
 
 def test_merkle_root_one_leaf():
     mt = MerkleTree()
     v_hex = 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb'
-    mt.add_leaves(v_hex)
+    mt.add_leaves(v_hex, False)
     assert mt.is_tree_ready
     assert v_hex == mt.get_leaf(0)
     assert v_hex == mt.merkle_root
@@ -82,7 +82,7 @@ def test_get_proof_two_leaves():
         'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
     )
     mt = MerkleTree()
-    mt.add_leaves([v_left, v_right])
+    mt.add_leaves([v_left, v_right], False)
     assert [("right", v_right)] == mt.get_proof(0)
     assert [("left", v_left)] == mt.get_proof(1)
 
