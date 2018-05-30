@@ -96,14 +96,14 @@ class MerkleTree(object):
         proof = []
         for i in range(len(self.levels) - 1, 0, -1):
             is_right_node = index % 2 == 1
-            num_leaves_current_level = len(self.levels[i])
-            if index == num_leaves_current_level - 1 and not is_right_node:
-                index = int(index / 2.)
-                continue
-            sibling_index = index - 1 if is_right_node else index + 1
-            sibling_pos = "left" if is_right_node else "right"
-            sibling_value = byte_to_hex(self.levels[i][sibling_index])
-            proof.append((sibling_pos, sibling_value))
+            current_level = self.levels[i]
+            is_solo_node = (index == len(current_level) - 1 and
+                            not is_right_node)
+            if not is_solo_node:
+                sibling_index = index - 1 if is_right_node else index + 1
+                sibling_pos = "left" if is_right_node else "right"
+                sibling_value = byte_to_hex(current_level[sibling_index])
+                proof.append((sibling_pos, sibling_value))
             index = int(index / 2.)
         return proof
 

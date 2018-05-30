@@ -10,22 +10,12 @@ It includes a `MerkleTree` class for creating Merkle trees, generating merkle pr
 ## Installation
 
 ```
-pip install merkletree
+pip install pymerkletree
 ```
 
 ### Demo
 
-```python
-import merkletree
-
-mt = MerkleTree(hash_type="md5")  # default is sha256
-# valid hashTypes include all crypto hash algorithms
-# such as 'MD5', 'SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512'
-# as well as the SHA3 family of algorithms
-# including 'SHA3-224', 'SHA3-256', 'SHA3-384', and 'SHA3-512'
-```
-
-To see more details, you can consult the folder `demo`.
+The source code is simple by itself and examples can be found in the folder `demo`.
 
 ## Notes
 

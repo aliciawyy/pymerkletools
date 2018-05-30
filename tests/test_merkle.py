@@ -2,7 +2,7 @@ import hashlib
 from parameterized import parameterized
 from pytest import raises
 
-from merkletree import MerkleTree, byte_to_hex, hex_to_byte
+from pymerkletree import MerkleTree, byte_to_hex, hex_to_byte
 
 
 _value_hash_pair = [
@@ -104,9 +104,14 @@ def test_is_proof_valid_five_leaves():
     mt = MerkleTree()
     values, _ = zip(*_value_hash_pair)
     mt.add_leaves(values, True)
-    proof = mt.get_proof(3)
-    assert mt.is_proof_valid(proof, _value_hash_pair[3][1])
-    assert not mt.is_proof_valid(proof, _value_hash_pair[2][1])
+    proof_3 = mt.get_proof(3)
+    assert mt.is_proof_valid(proof_3, _value_hash_pair[3][1])
+    assert not mt.is_proof_valid(proof_3, _value_hash_pair[2][1])
+    expected_proof_4 = [
+        ("left",
+         "14ede5e8e97ad9372327728f5099b95604a39593cac3bd38a343ad76205213e7")
+    ]
+    assert expected_proof_4 == mt.get_proof(4)
 
 
 @parameterized.expand([
@@ -138,7 +143,6 @@ def test_is_proof_valid_other_hash_types(hash_type, expected_root):
     mt = MerkleTree(hash_type=hash_type)
     values, _ = zip(*_value_hash_pair)
     mt.add_leaves(values[:2], True)
-    print(mt.merkle_root)
     assert expected_root == mt.merkle_root
     proof = mt.get_proof(1)
     assert [("left", mt.get_leaf(0))] == proof
