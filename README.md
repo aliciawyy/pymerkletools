@@ -1,5 +1,5 @@
 # pymerkletree
-[![PyPI version](https://badge.fury.io/py/merkletools.svg)](https://badge.fury.io/py/merkletools)
+[![PyPI version](https://badge.fury.io/py/pymerkletree.svg)](https://badge.fury.io/py/pymerkletree)
 [![Build Status](https://travis-ci.org/aliciawyy/pymerkletools.svg?branch=master)](https://travis-ci.org/aliciawyy/pymerkletools)
 [![codecov](https://codecov.io/gh/aliciawyy/pymerkletools/branch/master/graph/badge.svg)](https://codecov.io/gh/aliciawyy/pymerkletools)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cfa9766c9537f10f72f1/maintainability)](https://codeclimate.com/github/aliciawyy/pymerkletools/maintainability)

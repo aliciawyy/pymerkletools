@@ -6,7 +6,7 @@ install_requires = [
 ]
 
 long_description = (
-    "This project is adapted from the pymerkletools of Tierion."
+    "This project is adapted from the pymerkletools of Tierion. "
     "It includes a `MerkleTree` class for creating Merkle trees, "
     "generating merkle proofs, and verification of merkle proofs."
 )
