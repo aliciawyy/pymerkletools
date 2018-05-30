@@ -48,12 +48,14 @@ def test_merkle_root_basics():
         'cb4990b9a8936bbc137ddeb6dcab4620897b099a450ecdc5f3e86ef4b3a7135c'
     )
     expected_root = hashlib.sha256(
-        bytearray.fromhex(v_left) + bytearray.fromhex(v_right)
+        hex_to_byte(v_left) + hex_to_byte(v_right)
     ).hexdigest()
 
     mt = MerkleTree()
     mt.add_leaf([v_left, v_right])
     assert expected_root == mt.merkle_root
+    mt.add_leaf(v_right)
+    assert expected_root != mt.merkle_root
 
 
 def test_merkle_root_one_leaf():

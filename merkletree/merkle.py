@@ -38,8 +38,15 @@ def _get_hash_func(hash_type):
 class MerkleTree(object):
     def __init__(self, hash_type="sha256"):
         self.hash_func = _get_hash_func(hash_type)
-        self.leaves = []
-        self.levels = None
+        self.levels = [[]]
+
+    @property
+    def leaves(self):
+        return self.levels[-1]
+
+    @property
+    def is_tree_ready(self):
+        return len(self.levels[-1]) == 1 or len(self.levels) > 1
 
     def add_leaf(self, values, do_hash=False):
         if not isinstance(values, (list, tuple)):
@@ -50,6 +57,8 @@ class MerkleTree(object):
                 v = self.hash_func(v).hexdigest()
             v = hex_to_byte(v)
             self.leaves.append(v)
+        if self.is_tree_ready:
+            self.levels = [self.leaves]
 
     def get_leaf(self, index):
         return byte_to_hex(self.leaves[index])
@@ -59,7 +68,7 @@ class MerkleTree(object):
         return len(self.leaves)
 
     def _make_tree(self):
-        if self.levels:
+        if self.is_tree_ready:
             return
         if self.num_leaves == 0:
             raise ValueError("No leaf to make tree!")
