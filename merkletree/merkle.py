@@ -72,7 +72,6 @@ class MerkleTree(object):
             return
         if self.num_leaves == 0:
             raise ValueError("No leaf to make tree!")
-        self.levels = [self.leaves]
         while len(self.levels[0]) > 1:
             self._calculate_next_level()
 
