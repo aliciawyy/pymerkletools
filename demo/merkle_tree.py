@@ -1,7 +1,7 @@
-import pymerkletree as pm
+import amerkletree as merkle
 
 # Construct a Merkle Tree
-mt = pm.MerkleTree(hash_type="sha256")  # default is sha256
+mt = merkle.MerkleTree(hash_type="sha256")  # default is sha256
 # valid hashTypes include all crypto hash algorithms
 # such as 'MD5', 'SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512'
 # as well as the SHA3 family of algorithms
@@ -9,7 +9,7 @@ mt = pm.MerkleTree(hash_type="sha256")  # default is sha256
 
 mt.add_leaves(["a", "b", "word", "c"], do_hash=True)
 
-print("Merkle Root = ", mt.merkle_root)
+print("Merkle Root =", mt.merkle_root)
 
 proof = mt.get_proof(2)
 

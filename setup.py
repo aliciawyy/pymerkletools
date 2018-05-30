@@ -6,8 +6,8 @@ install_requires = [
 ]
 
 setup(
-    name='pymerkletree',
-    version='1.0.0',
+    name="amerkletree",
+    version='1.0.4',
     description='Simple Merkle Tree',
     classifiers=[
         "Intended Audience :: Developers",
@@ -22,6 +22,7 @@ setup(
     ],
     url='https://github.com/aliciawyy/pymerkletools',
     author='Alice Wang, Eder Santana',
+    author_email="rainingilove@gmail.com",
     keywords='merkle tree, blockchain',
     license="MIT",
     packages=find_packages(),
