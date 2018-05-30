@@ -5,10 +5,14 @@ install_requires = [
     "pysha3>=1.0b1"
 ]
 
+with open("README.md", "r") as fp:
+    long_description = fp.read()
+
 setup(
-    name="amerkletree",
-    version='1.0.4',
+    name="pymerkletree",
+    version='1.0.5',
     description='Simple Merkle Tree',
+    long_description=long_description,
     classifiers=[
         "Intended Audience :: Developers",
         "Intended Audience :: Education",

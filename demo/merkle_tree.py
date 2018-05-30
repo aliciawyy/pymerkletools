@@ -1,4 +1,4 @@
-import amerkletree as merkle
+import pymerkletree as merkle
 
 # Construct a Merkle Tree
 mt = merkle.MerkleTree(hash_type="sha256")  # default is sha256

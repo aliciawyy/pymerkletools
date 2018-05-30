@@ -2,7 +2,7 @@ import hashlib
 from parameterized import parameterized
 from pytest import raises
 
-from amerkletree import MerkleTree, byte_to_hex, hex_to_byte
+from pymerkletree import MerkleTree, byte_to_hex, hex_to_byte
 
 
 _value_hash_pair = [
