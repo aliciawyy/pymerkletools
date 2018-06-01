@@ -6,6 +6,8 @@
 
 This project is adapted from the [pymerkletools](https://github.com/aliciawyy/pymerkletools) of Tierion.
 
+I have refactored and simplified most part of the code so it can be easier for development or for the understanding of MerkleTree.
+
 It includes a `MerkleTree` class for creating Merkle trees, generating merkle proofs, and verification of merkle proofs.
 
 ## Installation
