@@ -60,12 +60,12 @@ class MerkleTree(object):
     def add_leaves(self, values, do_hash=True):
         if not isinstance(values, (list, tuple)):
             values = [values]
-        for v in values:
-            if do_hash:
-                v = v.encode('utf-8')
-                v = self.hash_func(v).hexdigest()
-            v = hex_to_byte(v)
-            self.leaves.append(v)
+        if do_hash:
+            values = map(
+                lambda v: self.hash_func(str.encode(v)).hexdigest(), values
+            )
+        values = map(hex_to_byte, values)
+        self.leaves.extend(values)
         if self.is_tree_ready:
             self.levels = [self.leaves]
 
