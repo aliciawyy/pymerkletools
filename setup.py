@@ -36,5 +36,7 @@ setup(
     include_package_data=False,
     zip_safe=False,
     install_requires=install_requires,
-    tests_require=["pytest==3.6.1", "pytest-cov==2.5.1"]
+    extras_require={
+        "test": ["pytest==3.6.1", "pytest-cov==2.5.1"]
+    }
 )
