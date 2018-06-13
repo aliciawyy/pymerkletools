@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/aliciawyy/pymerkletools.svg?branch=master)](https://travis-ci.org/aliciawyy/pymerkletools)
 [![codecov](https://codecov.io/gh/aliciawyy/pymerkletools/branch/master/graph/badge.svg)](https://codecov.io/gh/aliciawyy/pymerkletools)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cfa9766c9537f10f72f1/maintainability)](https://codeclimate.com/github/aliciawyy/pymerkletools/maintainability)
+[![Updates](https://pyup.io/repos/github/aliciawyy/pymerkletools/shield.svg)](https://pyup.io/repos/github/aliciawyy/pymerkletools/)
 
 This project is adapted from the [pymerkletools](https://github.com/aliciawyy/pymerkletools) of Tierion.
 
