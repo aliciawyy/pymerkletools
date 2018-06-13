@@ -8,7 +8,7 @@ plugins:
     enabled: true
     config:
       languages:
-      - python
+        - python
   fixme:
     enabled: true
   radon:

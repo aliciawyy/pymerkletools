@@ -1,9 +1,8 @@
 from setuptools import find_packages
 from setuptools import setup
 
-install_requires = [
-    "pysha3>=1.0b1"
-]
+with open("requirements.txt", "r") as f:
+    install_requires = [line.strip() for line in f.readlines()]
 
 long_description = (
     "This project is adapted from the pymerkletools of Tierion. "
@@ -36,5 +35,6 @@ setup(
     packages=find_packages(),
     include_package_data=False,
     zip_safe=False,
-    install_requires=install_requires
+    install_requires=install_requires,
+    tests_require=["pytest==3.6.1", "pytest-cov==2.5.1"]
 )

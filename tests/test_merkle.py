@@ -1,6 +1,5 @@
 import hashlib
-from parameterized import parameterized
-from pytest import raises
+from pytest import raises, mark
 
 from pymerkletree import MerkleTree, byte_to_hex, hex_to_byte
 
@@ -23,10 +22,10 @@ def _load_merkle_trees():
     mt3 = MerkleTree()
     for v in values:
         mt3.add_leaves(v, True)
-    return [(mt1, ), (mt2, ), (mt3, )]
+    return [mt1, mt2, mt3]
 
 
-@parameterized(_load_merkle_trees)
+@mark.parametrize("mt", _load_merkle_trees())
 def test_add_leaves(mt):
     expected_root = ("d71f8983ad4ee170f8129f1ebcdd7440be7798d8e1c80420"
                      "bf11f1eced610dba")
@@ -114,7 +113,7 @@ def test_is_proof_valid_five_leaves():
     assert expected_proof_4 == mt.get_proof(4)
 
 
-@parameterized.expand([
+@mark.parametrize("hash_type,expected_root", [
     ("sha224", "8004070edc6bb1c173c662305ba7938b8ba576f0bf74daecab1d7760"),
     ("sha3_224", "c339999aa697ec4814f141c1e67ce782764b1264056e7d48bd14b40a"),
 

@@ -1,4 +1,1 @@
-pysha3>=1.0b1
-parameterized
-pytest
-pytest-cov
+pysha3==1.0.2
