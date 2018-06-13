@@ -7,15 +7,12 @@ except ImportError:
     from warnings import warn
     warn("sha3 is not working!")
 
-if sys.version_info.major == 2:
-    import binascii
-
-
-def byte_to_hex(x):
-    if sys.version_info.major == 3:
+if sys.version_info.major == 3:
+    def byte_to_hex(x):
         return x.hex()
-    else:
-        return binascii.hexlify(x)
+else:
+    import binascii
+    byte_to_hex = binascii.hexlify
 
 
 hex_to_byte = bytearray.fromhex
