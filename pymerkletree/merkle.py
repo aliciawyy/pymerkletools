@@ -1,35 +1,10 @@
-import sys
-import hashlib
-
 try:
     import sha3
 except ImportError:
     from warnings import warn
     warn("sha3 is not working!")
 
-if sys.version_info.major == 3:
-    def byte_to_hex(x):
-        return x.hex()
-else:
-    import binascii
-    byte_to_hex = binascii.hexlify
-
-
-hex_to_byte = bytearray.fromhex
-
-
-def _get_hash_func(hash_type):
-    supported_hash_types = {
-        'sha256', 'md5', 'sha224', 'sha384', 'sha512',
-        'sha3_256', 'sha3_224', 'sha3_384', 'sha3_512'
-    }
-    hash_type = hash_type.lower()
-    if hash_type not in supported_hash_types:
-        raise NotImplementedError(
-            "`hash_type` {} is not supported. Supported types are "
-            "{}".format(hash_type, supported_hash_types)
-        )
-    return getattr(hashlib, hash_type)
+from .utils import get_hash_func, hex_to_byte, byte_to_hex
 
 
 class MerkleTree(object):
@@ -39,7 +14,7 @@ class MerkleTree(object):
     }
 
     def __init__(self, hash_type="sha256"):
-        self.hash_func = _get_hash_func(hash_type)
+        self.hash_func = get_hash_func(hash_type)
         self.levels = [[]]
 
     @property
@@ -112,7 +87,7 @@ class MerkleTree(object):
 
 def is_proof_valid(proof, target_hash, merkle_root, hash_type="sha256"):
     proof_hash_byte = hex_to_byte(target_hash)
-    hash_func = _get_hash_func(hash_type)
+    hash_func = get_hash_func(hash_type)
     for leaf in proof:
         sibling_pos, sibling_hash = list(leaf.items())[0]
         sibling_hash_byte = hex_to_byte(sibling_hash)

@@ -1,7 +1,7 @@
 import hashlib
 from pytest import raises, mark
 
-from pymerkletree import MerkleTree, byte_to_hex, hex_to_byte, is_proof_valid
+from pymerkletree import MerkleTree, hex_to_byte, is_proof_valid
 
 
 _value_hash_pair = [
@@ -35,13 +35,6 @@ def test_add_leaves(mt):
 
 def test_init_raises():
     raises(NotImplementedError, MerkleTree, "sha_dummy")
-
-
-def test_byte_hex():
-    mt = MerkleTree()
-    v_hex = mt.hash_func(str.encode("000")).hexdigest()
-    v_byte = hex_to_byte(v_hex)
-    assert v_hex == byte_to_hex(v_byte)
 
 
 def test_merkle_root_raises():
