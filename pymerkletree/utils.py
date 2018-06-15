@@ -2,6 +2,12 @@ import sys
 import json
 import hashlib
 
+try:
+    import sha3
+except ImportError:
+    from warnings import warn
+    warn("sha3 is not working!")
+
 if sys.version_info.major == 3:
     def byte_to_hex(x):
         return x.hex()

@@ -1,9 +1,3 @@
-try:
-    import sha3
-except ImportError:
-    from warnings import warn
-    warn("sha3 is not working!")
-
 from .utils import get_hash_func, hex_to_byte, byte_to_hex
 
 
