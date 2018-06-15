@@ -1,11 +1,15 @@
+from pytest import mark
 from pymerkletree import utils
 
 
-def test_compute_hash():
+@mark.parametrize("hash_type,expected", [
+    ("sha256",
+     "cf494b434cb87365614c01c27506ea800119e556151965129fc3b98b11d4f10c"),
+    ("sha224", "36b63daaa37b14164f8e08a6284e964359be4f4260162077666a1aa2"),
+])
+def test_compute_hash(hash_type, expected):
     data = ["2016-05-28", {"SHY": ".5", "SPY": ".5"}]
-    expected = ("cf494b434cb87365614c01c27506ea800119e556151965129fc3b"
-                "98b11d4f10c")
-    assert expected == utils.compute_hash(data)
+    assert expected == utils.compute_hash(data, hash_type=hash_type)
 
 
 def test_byte_hex():
