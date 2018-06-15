@@ -16,7 +16,7 @@ proof = mt.get_proof(2)
 print("Proof of the second leaf\n", proof)
 
 print("Is proof valid for the second leaf (expected True): ",
-      mt.is_proof_valid(proof, mt.get_leaf(2)))
+      merkle.is_proof_valid(proof, mt.get_leaf(2), mt.merkle_root))
 
 print("Is proof valid for the third leaf (expected False): ",
-      mt.is_proof_valid(proof, mt.get_leaf(3)))
+      merkle.is_proof_valid(proof, mt.get_leaf(3), mt.merkle_root))

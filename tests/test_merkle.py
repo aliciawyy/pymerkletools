@@ -1,7 +1,7 @@
 import hashlib
 from pytest import raises, mark
 
-from pymerkletree import MerkleTree, byte_to_hex, hex_to_byte
+from pymerkletree import MerkleTree, byte_to_hex, hex_to_byte, is_proof_valid
 
 
 _value_hash_pair = [
@@ -82,8 +82,8 @@ def test_get_proof_two_leaves():
     )
     mt = MerkleTree()
     mt.add_leaves([v_left, v_right], False)
-    assert [("right", v_right)] == mt.get_proof(0)
-    assert [("left", v_left)] == mt.get_proof(1)
+    assert [{"right": v_right}] == mt.get_proof(0)
+    assert [{"left": v_left}] == mt.get_proof(1)
 
 
 def test_get_proof_three_leaves():
@@ -91,12 +91,12 @@ def test_get_proof_three_leaves():
     mt.add_leaves(list("abc"), do_hash=True)
     proof = mt.get_proof(1)
     expected = [
-        ("left", _value_hash_pair[0][1]),
-        ("right",
-         "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6")
+        {"left": _value_hash_pair[0][1]},
+        {"right":
+         "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6"}
     ]
     assert expected == proof
-    assert mt.is_proof_valid(proof, mt.get_leaf(1))
+    assert is_proof_valid(proof, mt.get_leaf(1), mt.merkle_root)
 
 
 def test_is_proof_valid_five_leaves():
@@ -104,11 +104,11 @@ def test_is_proof_valid_five_leaves():
     values, _ = zip(*_value_hash_pair)
     mt.add_leaves(values, True)
     proof_3 = mt.get_proof(3)
-    assert mt.is_proof_valid(proof_3, _value_hash_pair[3][1])
-    assert not mt.is_proof_valid(proof_3, _value_hash_pair[2][1])
+    assert is_proof_valid(proof_3, _value_hash_pair[3][1], mt.merkle_root)
+    assert not is_proof_valid(proof_3, _value_hash_pair[2][1], mt.merkle_root)
     expected_proof_4 = [
-        ("left",
-         "14ede5e8e97ad9372327728f5099b95604a39593cac3bd38a343ad76205213e7")
+        {"left":
+         "14ede5e8e97ad9372327728f5099b95604a39593cac3bd38a343ad76205213e7"}
     ]
     assert expected_proof_4 == mt.get_proof(4)
 
@@ -144,6 +144,6 @@ def test_is_proof_valid_other_hash_types(hash_type, expected_root):
     mt.add_leaves(values[:2], True)
     assert expected_root == mt.merkle_root
     proof = mt.get_proof(1)
-    assert [("left", mt.get_leaf(0))] == proof
-    assert mt.is_proof_valid(proof, mt.get_leaf(1))
-    assert not mt.is_proof_valid(proof, mt.get_leaf(0))
+    assert [{"left": mt.get_leaf(0)}] == proof
+    assert is_proof_valid(proof, mt.get_leaf(1), mt.merkle_root, hash_type)
+    assert not is_proof_valid(proof, mt.get_leaf(0), mt.merkle_root, hash_type)

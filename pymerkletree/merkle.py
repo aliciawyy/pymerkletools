@@ -105,17 +105,20 @@ class MerkleTree(object):
                 sibling_value = byte_to_hex(
                     current_level[index + offset]
                 )
-                proof.append((sibling_pos, sibling_value))
+                proof.append({sibling_pos: sibling_value})
             index = int(index / 2.)
         return proof
 
-    def is_proof_valid(self, proof, target_hash):
-        proof_hash_byte = hex_to_byte(target_hash)
-        for sibling_pos, sibling_hash in proof:
-            sibling_hash_byte = hex_to_byte(sibling_hash)
-            if sibling_pos == "left":
-                info = sibling_hash_byte + proof_hash_byte
-            else:
-                info = proof_hash_byte + sibling_hash_byte
-            proof_hash_byte = self.hash_func(info).digest()
-        return byte_to_hex(proof_hash_byte) == self.merkle_root
+
+def is_proof_valid(proof, target_hash, merkle_root, hash_type="sha256"):
+    proof_hash_byte = hex_to_byte(target_hash)
+    hash_func = _get_hash_func(hash_type)
+    for leaf in proof:
+        sibling_pos, sibling_hash = list(leaf.items())[0]
+        sibling_hash_byte = hex_to_byte(sibling_hash)
+        if sibling_pos == "left":
+            info = sibling_hash_byte + proof_hash_byte
+        else:
+            info = proof_hash_byte + sibling_hash_byte
+        proof_hash_byte = hash_func(info).digest()
+    return byte_to_hex(proof_hash_byte) == merkle_root
