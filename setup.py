@@ -1,9 +1,6 @@
 from setuptools import find_packages
 from setuptools import setup
 
-with open("requirements.txt", "r") as f:
-    install_requires = [line.strip() for line in f.readlines()]
-
 long_description = (
     "This project is adapted from the pymerkletools of Tierion. "
     "It includes a `MerkleTree` class for creating Merkle trees, "
@@ -13,7 +10,7 @@ long_description = (
 
 setup(
     name="pymerkletree",
-    version='1.1.0a',
+    version='1.1.1',
     description='Simple Merkle Tree',
     long_description=long_description,
     classifiers=[
@@ -35,7 +32,7 @@ setup(
     packages=find_packages(),
     include_package_data=False,
     zip_safe=False,
-    install_requires=install_requires,
+    install_requires=["pysha3==1.0.2"],
     extras_require={
         "test": ["pytest==3.6.1", "pytest-cov==2.5.1"]
     }
