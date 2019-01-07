@@ -8,12 +8,9 @@ except ImportError:
     from warnings import warn
     warn("sha3 is not working!")
 
-if sys.version_info.major == 3:
-    def byte_to_hex(x):
-        return x.hex()
-else:
-    import binascii
-    byte_to_hex = binascii.hexlify
+
+def byte_to_hex(x):
+    return x.hex()
 
 
 hex_to_byte = bytearray.fromhex

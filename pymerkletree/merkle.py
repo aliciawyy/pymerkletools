@@ -1,14 +1,15 @@
 from .utils import get_hash_func, hex_to_byte, byte_to_hex
 
 
-class MerkleTree(object):
+class MerkleTree:
 
     _is_left_node_sibling_map = {
         True: ("right", 1), False: ("left", -1)
     }
 
     def __init__(self, hash_type="sha256"):
-        self.hash_func = get_hash_func(hash_type)
+        self.hash_type = hash_type
+        self.hash_func = get_hash_func(self.hash_type)
         self.levels = [[]]
 
     @property
@@ -50,7 +51,7 @@ class MerkleTree(object):
         current_level = self.levels[0]
         num_leaves_current_level = len(current_level)
         new_level = [
-            self.hash_func(current_level[i] + current_level[i+1]).digest()
+            self.hash_func(current_level[i] + current_level[i + 1]).digest()
             for i in range(0, num_leaves_current_level - 1, 2)
         ]
         if num_leaves_current_level % 2 == 1:
